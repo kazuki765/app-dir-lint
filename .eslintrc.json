@@ -1,0 +1,131 @@
+{
+  "extends": [
+    "eslint:recommended",
+    "plugin:import/recommended",
+    "plugin:import/typescript",
+    "plugin:@typescript-eslint/recommended",
+    "plugin:@typescript-eslint/recommended-requiring-type-checking",
+    "next/core-web-vitals", // これは、nextの拡張版のeslintの設定。core-web-vitalsに関するもの含めたもの
+    "prettier"
+  ],
+  "parser": "@typescript-eslint/parser", // eslintがtypescriptを理解できるようにする
+  "parserOptions": {
+    "sourceType": "module",
+    "project": "./tsconfig.json"
+  },
+  "plugins": [
+    "import",
+    "import-access",
+    "@typescript-eslint",
+    "strict-dependencies"
+  ],
+  "settings": {
+    "import/resolver": {
+      "typescript": true,
+      "node": true
+    }
+  },
+  "rules": {
+    "import/order": [
+      "error",
+      {
+        "groups": [
+          "builtin", // 組み込みモジュール
+          "external", // 外部モジュール(node_modules)
+          "internal", // 内部モジュール(@)
+          ["parent", "sibling"],
+          "index",
+          "type",
+          "unknown"
+        ],
+        "pathGroups": [
+          {
+            "pattern": "@/**",
+            "group": "internal",
+            "position": "before"
+          },
+          {
+            "pattern": "react",
+            "group": "external"
+          },
+          {
+            "pattern": "**.css",
+            "group": "index"
+          },
+          {
+            "pattern": "next",
+            "group": "external"
+          }
+        ],
+        "pathGroupsExcludedImportTypes": ["builtin"],
+        "newlines-between": "always",
+        "alphabetize": {
+          "order": "asc", // アルファベット順
+          "caseInsensitive": true // 大文字小文字を区別しない
+        },
+        "distinctGroup": false // 設定したpathGroupごとに改行しない。
+      }
+    ],
+    "strict-dependencies/strict-dependencies": [
+      "error",
+      [
+        // external module dependencies
+        // 利用するライブラリには基本的に全て腐敗防止層を設け、そのままimportを不可とする
+        {
+          "module": "swr",
+          "allowReferenceFrom": ["src/libs/**"]
+        },
+        {
+          "module": "zod",
+          "allowReferenceFrom": ["src/validations/**"]
+        },
+        {
+          "module": "react-aria",
+          "allowReferenceFrom": ["src/components/**"]
+        },
+        {
+          "module": "react-stately",
+          "allowReferenceFrom": ["src/components/**"]
+        },
+        //  APIの情報を知ることができるのは、src/app以下のモジュールのみ.
+        //  腐敗防止層ここでラップし、src/app以下のモジュールには、このラップしたモジュールを使うようにする
+        // {
+        //  "module": "open-api-generated-module",
+        //  "allowReferenceFrom": ["src/libs/apiClient/**"]
+        // },
+
+        // internal module dependencies
+        {
+          "module": "src/components",
+          "allowReferenceFrom": ["src/app/**"]
+        },
+        {
+          "module": "src/validations",
+          "allowReferenceFrom": ["src/app/**"]
+        },
+        {
+          "module": "src/hooks",
+          "allowReferenceFrom": ["src/app/**", "src/components/**"]
+        },
+        {
+          "module": "src/libs",
+          "targetMembers": ["useClientFetch", "apiClient"],
+          "allowReferenceFrom": ["src/app/**"]
+        }
+      ],
+      {
+        "resolveRelativeImport": true,
+        "pathIndexMap": {
+          "@/*": 0
+        }
+      }
+    ],
+    "import-access/jsdoc": [
+      "error",
+      {
+        "defaultImportability": "package",
+        "treatSelfReferenceAs": "internal"
+      }
+    ]
+  }
+}
