@@ -15,10 +15,14 @@
     "incremental": true,
     "plugins": [
       {
-        "name": "eslint-plugin-import-access"
+        "name": "next"
       },
       {
-        "name": "next"
+        "name": "eslint-plugin-import-access",
+        "jsdoc": {
+          "defaultImportability": "package",
+          "treatSelfReferenceAs": "internal"
+        }
       }
     ],
     "baseUrl": ".",

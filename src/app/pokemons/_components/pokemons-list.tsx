@@ -2,9 +2,13 @@ import { PokeAPI } from "pokeapi-types";
 
 import { PokemonsListItem } from "./pokemons-list-item";
 
-export async function PokemonsList() {
+type Props = {
+  offset: number;
+};
+
+export async function PokemonsList({ offset = 0 }: Props) {
   const pokemonList = await fetch(
-    "https://pokeapi.co/api/v2/pokemon?limit=10",
+    `https://pokeapi.co/api/v2/pokemon?limit=10&offset=${offset}`,
   ).then(
     (response) => response.json() as Promise<PokeAPI.NamedAPIResourceList>,
   );

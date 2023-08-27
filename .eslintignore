@@ -2,4 +2,10 @@ node_modules
 .next
 public
 
+package-lock.json
+tsconfig.json
 next.config.js
+.stylelintrc.js
+.prettierrc.js
+postcss.config.js
+**/*.css

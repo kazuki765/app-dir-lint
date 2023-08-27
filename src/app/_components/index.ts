@@ -1,1 +1,1 @@
-export { PokemonsContainer } from "./pokemons-container";
+export { Header } from "./header";

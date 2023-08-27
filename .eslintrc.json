@@ -16,8 +16,9 @@
   "plugins": [
     "import",
     "import-access",
-    "@typescript-eslint",
-    "strict-dependencies"
+    "unused-imports",
+    "strict-dependencies",
+    "@typescript-eslint"
   ],
   "settings": {
     "import/resolver": {
@@ -35,6 +36,7 @@
           "internal", // 内部モジュール(@)
           ["parent", "sibling"],
           "index",
+          "object",
           "type",
           "unknown"
         ],
@@ -54,7 +56,7 @@
           },
           {
             "pattern": "next",
-            "group": "external"
+            "group": "internal"
           }
         ],
         "pathGroupsExcludedImportTypes": ["builtin"],
@@ -77,7 +79,7 @@
         },
         {
           "module": "zod",
-          "allowReferenceFrom": ["src/validations/**"]
+          "allowReferenceFrom": ["src/validations/**", "src/libs/**"]
         },
         {
           "module": "react-aria",
@@ -111,10 +113,13 @@
           "module": "src/libs",
           "targetMembers": ["useClientFetch", "apiClient"],
           "allowReferenceFrom": ["src/app/**"]
+        },
+        {
+          "module": "src/**/*.module.css",
+          "allowSameModule": true
         }
       ],
       {
-        "resolveRelativeImport": true,
         "pathIndexMap": {
           "@/*": 0
         }
@@ -126,6 +131,9 @@
         "defaultImportability": "package",
         "treatSelfReferenceAs": "internal"
       }
-    ]
+    ],
+    // 以下は、no-unused-importのための設定。
+    "@typescript-eslint/no-unused-vars": "off",
+    "unused-imports/no-unused-imports-ts": "error"
   }
 }
