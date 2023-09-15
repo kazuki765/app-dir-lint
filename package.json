@@ -14,7 +14,7 @@
     "db:migrate": "prisma migrate dev -- --name",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build",
-    "chromatic": "chromatic --exit-zero-on-changes -- --token",
+    "chromatic": "chromatic --exit-zero-on-changes --project-token=$npm_config_chromatic_token",
     "test": ""
   },
   "dependencies": {
