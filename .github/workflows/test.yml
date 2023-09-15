@@ -1,0 +1,21 @@
+name: "visual reggression testing and unit testing"
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Install dependencies
+        run: npm instal
+      - name: Run unit tests
+        run: npm run test
+      - name: Chromatic
+        run: npm run chromatic --token=${{ secrets.CHROMATIC_PROJECT_TOKEN }}

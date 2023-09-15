@@ -6,6 +6,7 @@
     "plugin:@typescript-eslint/recommended",
     "plugin:@typescript-eslint/recommended-requiring-type-checking",
     "next/core-web-vitals", // これは、nextの拡張版のeslintの設定。core-web-vitalsに関するもの含めたもの
+    "plugin:storybook/recommended",
     "prettier"
   ],
   "parser": "@typescript-eslint/parser", // eslintがtypescriptを理解できるようにする
@@ -62,8 +63,8 @@
         "pathGroupsExcludedImportTypes": ["builtin"],
         "newlines-between": "always",
         "alphabetize": {
-          "order": "asc", // アルファベット順
-          "caseInsensitive": true // 大文字小文字を区別しない
+          "order": "asc",
+          "caseInsensitive": true
         },
         "distinctGroup": false // 設定したpathGroupごとに改行しない。
       }
@@ -89,12 +90,6 @@
           "module": "react-stately",
           "allowReferenceFrom": ["src/components/**"]
         },
-        //  APIの情報を知ることができるのは、src/app以下のモジュールのみ.
-        //  腐敗防止層ここでラップし、src/app以下のモジュールには、このラップしたモジュールを使うようにする
-        // {
-        //  "module": "open-api-generated-module",
-        //  "allowReferenceFrom": ["src/libs/apiClient/**"]
-        // },
 
         // internal module dependencies
         {
@@ -125,13 +120,7 @@
         }
       }
     ],
-    "import-access/jsdoc": [
-      "error",
-      {
-        "defaultImportability": "package",
-        "treatSelfReferenceAs": "internal"
-      }
-    ],
+    "import-access/jsdoc": ["error"],
     // 以下は、no-unused-importのための設定。
     "@typescript-eslint/no-unused-vars": "off",
     "unused-imports/no-unused-imports-ts": "error"

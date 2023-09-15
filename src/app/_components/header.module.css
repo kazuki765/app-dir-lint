@@ -1,0 +1,12 @@
+.header {
+  height: 2rem;
+  background-color: teal;
+}
+
+.navlist {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  height: 100%;
+  list-style: none;
+}

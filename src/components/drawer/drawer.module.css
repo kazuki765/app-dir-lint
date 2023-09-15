@@ -1,0 +1,20 @@
+.drawer {
+  position: absolute;
+  top: 0;
+  right: 0;
+  display: flex;
+  width: 800px;
+  height: 100%;
+  color: #222;
+  background-color: #f1f1f1;
+}
+
+.drawerClose {
+  display: flex;
+  width: 40px;
+}
+
+.close:hover {
+  cursor: pointer;
+  background-color: #ddd;
+}
