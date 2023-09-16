@@ -1,50 +1,30 @@
-import { useRouter } from "next/navigation";
-import { useCallback, useRef, useEffect, MouseEventHandler } from "react";
+import React, { useRef } from "react";
+import { AriaDialogProps, useDialog } from "react-aria";
 
-import styles from "./modal.module.css";
+type DialogProps = AriaDialogProps & {
+  title?: React.ReactNode;
+  children: React.ReactNode;
+};
 
-export function Modal({ children }: { children: React.ReactNode }) {
-  const overlay = useRef(null);
-  const wrapper = useRef(null);
-  const router = useRouter();
-
-  const onDismiss = useCallback(() => {
-    router.back();
-  }, [router]);
-
-  const onClick: MouseEventHandler = useCallback(
-    (e) => {
-      if (e.target === overlay.current || e.target === wrapper.current) {
-        if (onDismiss) onDismiss();
-      }
-    },
-    [onDismiss, overlay, wrapper],
-  );
-
-  const onKeyDown = useCallback(
-    (e: KeyboardEvent) => {
-      if (e.key === "Escape") onDismiss();
-    },
-    [onDismiss],
-  );
-
-  useEffect(() => {
-    document.addEventListener("keydown", onKeyDown);
-    return () => document.removeEventListener("keydown", onKeyDown);
-  }, [onKeyDown]);
+export function Dialog({ title, children, ...props }: DialogProps) {
+  const ref = useRef(null);
+  const { dialogProps, titleProps } = useDialog(props, ref);
 
   return (
     <div
-      ref={overlay}
-      onClick={onClick}
-      className={styles.overlay}
+      {...dialogProps}
+      ref={ref}
+      style={{ padding: 30 }}
     >
-      <div
-        ref={wrapper}
-        className={styles.modalContent}
-      >
-        {children}
-      </div>
+      {title && (
+        <h3
+          {...titleProps}
+          style={{ marginTop: 0 }}
+        >
+          {title}
+        </h3>
+      )}
+      {children}
     </div>
   );
 }

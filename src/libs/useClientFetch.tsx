@@ -1,5 +1,7 @@
-import useSWR from "swr";
+import useSWR, { Fetcher } from "swr";
 
-export const useClientFetch = (url: string) => {
-  return useSWR(url);
+type Key = string | string[];
+
+export const useClientFetch = (url: Key, fetcher: Fetcher) => {
+  return useSWR(url, fetcher);
 };
