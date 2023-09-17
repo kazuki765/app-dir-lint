@@ -1,9 +1,6 @@
 name: "visual reggression testing and unit testing"
 
 on:
-  push:
-    branches:
-      - main
   pull_request:
     branches:
       - main
@@ -48,8 +45,6 @@ jobs:
         run: npm i
       - name: Install Playwright
         run: npx playwright install --with-deps
-      - name: Build Storybook
-        run: npm run build-storybook --quiet
       - name: Serve Storybook and run tests
         run: npm run test-storybook:ci
       - name: Upload coverage to Codecov
