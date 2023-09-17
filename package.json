@@ -17,7 +17,8 @@
     "chromatic": "chromatic --exit-zero-on-changes --project-token=$npm_config_chromatic_token",
     "test": "",
     "test-storybook": "test-storybook",
-    "test-storybook:coverage": "test-storybook --coverage"
+    "test-storybook:coverage": "test-storybook --coverage",
+    "test-storybook:ci": "npx concurrently -k -s first -n \"SB,TEST\" -c \"magenta,blue\" \"npm run build-storybook --quiet && npx http-server storybook-static --port 6006 --silent\" \"wait-on tcp:127.0.0.1:6006 && npm run test-storybook:coverage\""
   },
   "dependencies": {
     "@hookform/resolvers": "^3.3.1",
@@ -70,7 +71,8 @@
     "stylelint-config-recess-order": "^4.3.0",
     "stylelint-config-standard": "^34.0.0",
     "stylelint-order": "^6.0.3",
-    "typescript": "5.2.2"
+    "typescript": "5.2.2",
+    "wait-on": "^7.0.1"
   },
   "volta": {
     "node": "18.17.0"
