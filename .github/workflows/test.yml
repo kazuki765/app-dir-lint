@@ -41,26 +41,21 @@ jobs:
         with:
           node-version: "18.x"
       - name: Install dependencies
-        run: npm install
+        run: npm ci
       - name: Install Playwright
         run: npx playwright install --with-deps
-      - name: Build storybook
-        run: npm run build-storybook -- --quiet
+      - name: Build Storybook
+        run: npm run build-storybook --quiet
       - name: Serve Storybook and run tests
         run: |
           npx concurrently -k -s first -n "SB,TEST" -c "magenta,blue" \
             "npx http-server storybook-static --port 6006 --silent" \
-            "npx wait-on tcp:6006 && npm run test-storybook:coverage"
+            "npx wait-on tcp:6006 && npx test-storybook --coverage"
 
   upload-codecov:
     needs: [unit-testing, interaction-testing]
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-      - name: Install dependencies
-        run: npm install
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v3
         env:
