@@ -30,6 +30,10 @@ jobs:
         run: npm install
       - name: Run unit tests
         run: npm run test
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v3
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
 
   interaction-testing:
     runs-on: ubuntu-latest
@@ -48,14 +52,7 @@ jobs:
         run: npm run build-storybook --quiet
       - name: Serve Storybook and run tests
         run: npm run test-storybook:ci
-
-  upload-codecov:
-    needs: [unit-testing, interaction-testing]
-    runs-on: ubuntu-latest
-    steps:
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v3
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
-          files: ./coverage/storybook/coverage-storybook.json
-          fail_ci_if_error: true
