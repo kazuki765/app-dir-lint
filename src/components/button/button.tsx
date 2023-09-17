@@ -6,7 +6,7 @@ import styles from "./button.module.css";
 type BaseButtonProps = AriaButtonOptions<"button">;
 export type ButtonProps = Pick<
   BaseButtonProps,
-  "onPress" | "isDisabled" | "aria-controls" | "aria-expanded"
+  "onPress" | "isDisabled" | "aria-controls" | "aria-expanded" | "aria-pressed"
 > & {
   children: React.ReactNode;
 };
