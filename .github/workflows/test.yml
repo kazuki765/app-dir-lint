@@ -9,7 +9,7 @@ on:
       - main
 
 jobs:
-  test:
+  visual-regression-testing:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -17,15 +17,46 @@ jobs:
           fetch-depth: 0
       - name: Install dependencies
         run: npm install
-      - name: Install Playwright
-        run: npx playwright install --with-deps
+      - name: Chromatic
+        run: npm run chromatic -chromatic_token=${{ secrets.CHROMATIC_PROJECT_TOKEN }}
+
+  unit-testing:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Install dependencies
+        run: npm install
       - name: Run unit tests
         run: npm run test
-      - name: Run interaction tests
-        run: npm run storybook && npm run test-storybook:coverage
-      - name: Upload coverage reports to Codecov
+
+  interaction-testing:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Install dependencies
+        run: npm install
+      - name: Build storybook
+        run: npm run build-storybook -- --quiet
+      - name: Serve Storybook and run tests
+        run: |
+          npx concurrently -k -s first -n "SB,TEST" -c "magenta,blue" \
+            "npx http-server storybook-static --port 6006 --silent" \
+            "npx wait-on tcp:6006 && npm run test-storybook:coverage"
+
+  upload-codecov:
+    needs: [unit-testing, interaction-testing]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Install dependencies
+        run: npm install
+      - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v3
         env:
           CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
-      - name: Chromatic
-        run: npm run chromatic -chromatic_token=${{ secrets.CHROMATIC_PROJECT_TOKEN }}
